@@ -29,6 +29,40 @@ To get started with OM1, let's run the Spot agent. Spot uses your webcam to capt
 
 You will need the [`uv` package manager](https://docs.astral.sh/uv/getting-started/installation/).
 
+### Prerequisites for Native Dependencies (Recommended)
+
+Some Python packages (e.g., `py-sr25519-bindings`) require Rust to build native extensions during installation.
+
+Install Rust using the official toolchain (recommended):
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+Follow the prompts (choose the default installation), then add Cargo to your PATH:
+```
+source "$HOME/.cargo/env"
+```
+
+Or add it permanently to your shell profile (e.g., ~/.zshrc or ~/.bash_profile):
+```
+echo 'source "$HOME/.cargo/env"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Verify the installation:
+```
+cargo --version
+```
+
+On macOS, you can alternatively use Homebrew:
+```
+brew install rustup
+rustup-init
+```
+
+>Note: If you skip this step and encounter build errors like "maturin failed" or "Cargo metadata failed", install Rust and retry.
+
 ### Clone the Repo
 
 ```bash
