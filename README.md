@@ -76,14 +76,26 @@ If you want to interact with the agent and see how it works, make sure ASR and T
 
 ## Interfacing with New Robot Hardware
 
-OM1 assumes that robot hardware provides a high-level SDK that accepts elemental movement and action commands such as `backflip`, `run`, `gently pick up the red apple`, `move(0.37, 0, 0)`, and `smile`. An example is provided in `src/actions/move/connector/ros2.py`:
+OM1 assumes that robot hardware provides a high-level SDK that accepts elemental movement and action commands such as `backflip`, `run`, `gently pick up the red apple`, `move(0.37, 0, 0)`, and `smile`. An example of mapping actions to commands for Unitree robots via ROS2 is provided in `src/actions/move/connector/ros2.py`:
 
 ```python
-...
+new_msg = {"move": ""}
+
+if output_interface.action == "stand still":
+    new_msg["move"] = "stand still"
+elif output_interface.action == "sit":
+    new_msg["move"] = "sit"
+elif output_interface.action == "dance":
+    new_msg["move"] = "dance"
 elif output_interface.action == "shake paw":
-    if self.sport_client:
-        self.sport_client.Hello()
-...
+    new_msg["move"] = "shake paw"
+# Add more actions as needed, e.g.:
+# elif output_interface.action == "walk":
+#     new_msg["move"] = "walk"
+# ...
+
+logging.info(f"SendThisToROS2: {new_msg}")
+# Then publish new_msg to the appropriate ROS2 topic
 ```
 
 If your robot hardware does not yet provide a suitable HAL (hardware abstraction layer), traditional robotics approaches such as RL (reinforcement learning) in concert with suitable simulation environments (Unity, Gazebo), sensors (such as hand mounted ZED depth cameras), and custom VLAs will be needed for you to create one. It is further assumed that your HAL accepts motion trajectories, provides battery and thermal management/monitoring, and calibrates and tunes sensors such as IMUs, LIDARs, and magnetometers.
